@@ -1,4 +1,7 @@
 1 --> Project Setup [Completed]
-2 --> Create Player 
+2 --> Create Player [Completed]
 3 --> Create Enemy 
 4 --> Move Characters with Event Listeners 
+5 --> Attack Bar 
+6 --> Attack animations 
+7 --> Game Over screen
