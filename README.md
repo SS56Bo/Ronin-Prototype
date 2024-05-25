@@ -2,4 +2,4 @@
 
 A prototype game that serves as an entry to GameDev
 
-Created using HTML & JavaScript
+Created using HTML Canvas & JavaScript
