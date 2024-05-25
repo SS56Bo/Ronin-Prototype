@@ -1,1 +1,4 @@
-Project Setup --> Create Player --> Create Enemy --> Move Characters with Event Listeners 
+1 --> Project Setup [Completed]
+2 --> Create Player 
+3 --> Create Enemy 
+4 --> Move Characters with Event Listeners 
