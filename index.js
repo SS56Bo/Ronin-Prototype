@@ -1,7 +1,7 @@
 const canvas = document.querySelector('canvas');
 const c = canvas.getContext('2d');
 
-let gravity = 0.2;
+let gravity = 0.7;
 canvas.width = 1280;
 canvas.height = 580;
 
@@ -23,7 +23,6 @@ const key = {
   },
 };
 
-let lastkey;
 class Sprite {
   constructor({ position, velocity }) {
     // Constrcutor for player position
@@ -31,6 +30,11 @@ class Sprite {
     this.velocity = velocity;
     this.height = 150;
     this.lastkey;
+    this.attackBox = {
+      position: this.position,
+      width: 100,
+      height: 50,
+    };
   }
 
   draw(fillStyle) {
@@ -76,8 +80,6 @@ const enemy = new Sprite({
   },
 });
 
-enemy.draw('blue');
-
 animate = () => {
   //arrow function for creating animate function
   window.requestAnimationFrame(animate);
@@ -88,17 +90,18 @@ animate = () => {
 
   //player control
   player.velocity.x = 0;
-  if (key.a.pressed && lastkey == 'a') {
-    player.velocity.x = -1;
-  } else if (key.d.pressed && lastkey == 'd') {
-    player.velocity.x = 1;
+  if (key.a.pressed && player.lastkey === 'a') {
+    player.velocity.x = -5;
+  } else if (key.d.pressed && player.lastkey === 'd') {
+    player.velocity.x = 5;
   }
 
   //enemy control
-  if (key.ArrowLeft.pressed && enemy.lastkey == 'ArrowLeft') {
-    enemy.velocity.x = -1;
-  } else if (key.ArrowRight.pressed && enemy.lastkey == 'ArrowRight') {
-    enemy.velocity.x = 1;
+  enemy.velocity.x = 0;
+  if (key.ArrowLeft.pressed && enemy.lastkey === 'ArrowLeft') {
+    enemy.velocity.x = -5;
+  } else if (key.ArrowRight.pressed && enemy.lastkey === 'ArrowRight') {
+    enemy.velocity.x = 5;
   }
 };
 
@@ -108,15 +111,15 @@ window.addEventListener('keydown', (event) => {
   switch (event.key) {
     case 'd':
       key.d.pressed = true;
-      lastkey = 'd';
+      player.lastkey = 'd';
       break;
     case 'a':
       key.a.pressed = true;
-      lastkey = 'a';
+      player.lastkey = 'a';
       break;
     case 'w':
-      player.velocity.y += -10;
-      lastkey = 'w';
+      player.velocity.y += -20;
+      player.lastkey = 'w';
       break;
 
     case 'ArrowRight':
@@ -124,11 +127,11 @@ window.addEventListener('keydown', (event) => {
       enemy.lastkey = 'ArrowRight';
       break;
     case 'ArrowLeft':
-      key.ArrowRight.pressed = true;
+      key.ArrowLeft.pressed = true;
       enemy.lastkey = 'ArrowLeft';
       break;
     case 'ArrowUp':
-      enemy.velocity.y += -10;
+      enemy.velocity.y += -20;
       enemy.lastkey = 'ArrowUp';
       break;
   }
