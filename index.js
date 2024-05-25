@@ -5,7 +5,14 @@ let gravity = 0.2;
 canvas.width = 1280;
 canvas.height = 580;
 
-c.fillRect(0, 0, canvas.width, canvas.height);
+const key = {
+  a: {
+    pressed: false,
+  },
+  d: {
+    pressed: false,
+  },
+};
 
 class Sprite {
   constructor({ position, velocity }) {
@@ -45,7 +52,7 @@ const player = new Sprite({
   },
   velocity: {
     x: 0,
-    y: 0.5,
+    y: 0,
   },
 });
 
@@ -71,7 +78,13 @@ animate = () => {
   c.fillRect(0, 0, canvas.width, canvas.height);
   player.update('red');
   enemy.update('green');
-  console.log('LFG');
+
+  player.velocity.x = 0;
+  if (key.a.pressed) {
+    player.velocity.x = -1;
+  } else {
+    player.velocity.x = 1;
+  }
 };
 
 animate(); //creates a constant recursive infinite loop
@@ -79,7 +92,10 @@ animate(); //creates a constant recursive infinite loop
 window.addEventListener('keydown', (event) => {
   switch (event.key) {
     case 'd':
-      player.velocity.x += 1;
+      key.d.pressed = true;
+      break;
+    case 'a':
+      key.a.pressed = true;
       break;
   }
   console.log(event.key);
@@ -88,10 +104,10 @@ window.addEventListener('keydown', (event) => {
 window.addEventListener('keyup', (event) => {
   switch (event.key) {
     case 'd':
-      player.velocity.x = 1;
+      key.d.pressed = false;
       break;
     case 'a':
-      player.velocity.x = -1;
+      key.a.pressed = false;
       break;
   }
   console.log(event.key);
