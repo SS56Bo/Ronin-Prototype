@@ -29,6 +29,7 @@ class Sprite {
     this.position = position;
     this.velocity = velocity;
     this.height = 150;
+    this.width = 50;
     this.lastkey;
     this.attackBox = {
       position: this.position,
@@ -36,11 +37,12 @@ class Sprite {
       height: 50,
     };
     this.color = color;
+    this.isAttacking = false;
   }
 
   draw(fillStyle) {
     c.fillStyle = this.color; //Constructor for player color and drawing [JUST A FORMALITY]
-    c.fillRect(this.position.x, this.position.y, 50, 150);
+    c.fillRect(this.position.x, this.position.y, this.width, this.height);
 
     //attack box
     c.fillStyle = 'yellow';
@@ -63,6 +65,13 @@ class Sprite {
     } else {
       this.velocity.y += gravity;
     }
+  }
+
+  attack() {
+    this.isAttacking = true;
+    setTimeout(() => {
+      this.isAttacking = false;
+    }, 100);
   }
 }
 
@@ -117,7 +126,13 @@ animate = () => {
   }
 
   //detect collision
-  if (player.attackBox.x + player.attackBox.width >= enemy.position.x) {
+  if (
+    player.attackBox.position.x + player.attackBox.width >= enemy.position.x &&
+    player.attackBox.position.x <= enemy.position.x + enemy.width &&
+    player.attackBox.position.y + player.attackBox.height >= enemy.position.y &&
+    player.attackBox.position.y <= enemy.position.y + enemy.height &&
+    player.isAttacking
+  ) {
     console.log('go');
   }
 };
@@ -137,6 +152,9 @@ window.addEventListener('keydown', (event) => {
     case 'w':
       player.velocity.y += -20;
       player.lastkey = 'w';
+      break;
+    case ' ':
+      player.attack();
       break;
 
     case 'ArrowRight':
