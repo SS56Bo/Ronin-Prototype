@@ -24,7 +24,7 @@ const key = {
 };
 
 class Sprite {
-  constructor({ position, velocity }) {
+  constructor({ position, velocity, color = 'red' }) {
     // Constrcutor for player position
     this.position = position;
     this.velocity = velocity;
@@ -35,11 +35,21 @@ class Sprite {
       width: 100,
       height: 50,
     };
+    this.color = color;
   }
 
   draw(fillStyle) {
-    c.fillStyle = fillStyle; //Constructor for player color and drawing [JUST A FORMALITY]
+    c.fillStyle = this.color; //Constructor for player color and drawing [JUST A FORMALITY]
     c.fillRect(this.position.x, this.position.y, 50, 150);
+
+    //attack box
+    c.fillStyle = 'yellow';
+    c.fillRect(
+      this.attackBox.position.x,
+      this.attackBox.position.y,
+      this.attackBox.width,
+      this.attackBox.height
+    );
   }
 
   update(fillStyle) {
@@ -65,6 +75,7 @@ const player = new Sprite({
     x: 0,
     y: 0,
   },
+  color: 'green',
 });
 
 player.draw('red');
@@ -78,6 +89,7 @@ const enemy = new Sprite({
     x: 0,
     y: 0,
   },
+  color: 'red',
 });
 
 animate = () => {
@@ -102,6 +114,11 @@ animate = () => {
     enemy.velocity.x = -5;
   } else if (key.ArrowRight.pressed && enemy.lastkey === 'ArrowRight') {
     enemy.velocity.x = 5;
+  }
+
+  //detect collision
+  if (player.attackBox.x + player.attackBox.width >= enemy.position.x) {
+    console.log('go');
   }
 };
 
