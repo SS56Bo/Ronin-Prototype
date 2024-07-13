@@ -24,7 +24,7 @@ const key = {
 };
 
 class Sprite {
-  constructor({ position, velocity, color = 'red' }) {
+  constructor({ position, velocity, color = 'red', offset }) {
     // Constrcutor for player position
     this.position = position;
     this.velocity = velocity;
@@ -36,6 +36,7 @@ class Sprite {
         x: this.position.x,
         y: this.position.y,
       },
+      offset,
       width: 100,
       height: 50,
     };
@@ -61,7 +62,7 @@ class Sprite {
 
   update(fillStyle) {
     this.draw(fillStyle);
-    this.attackBox.position.x = this.position.x;
+    this.attackBox.position.x = this.position.x + this.attackBox.offset.x;
     this.attackBox.position.y = this.position.y;
 
     this.position.x += this.velocity.x;
@@ -91,6 +92,10 @@ const player = new Sprite({
     x: 0,
     y: 0,
   },
+  offset: {
+    x: 0,
+    y: 0,
+  },
   color: 'green',
 });
 
@@ -105,8 +110,24 @@ const enemy = new Sprite({
     x: 0,
     y: 0,
   },
+  offset: {
+    x: -50,
+    y: 0,
+  },
   color: 'red',
 });
+
+function rectangularCollisions({ rectangle1, rectangle2 }) {
+  return (
+    rectangle1.attackBox.position.x + rectangle1.attackBox.width >=
+      rectangle2.position.x &&
+    rectangle1.attackBox.position.x <=
+      rectangle2.position.x + rectangle2.width &&
+    rectangle1.attackBox.position.y + rectangle1.attackBox.height >=
+      rectangle2.position.y &&
+    rectangle1.attackBox.position.y <= rectangle2.position.y + rectangle2.height
+  );
+}
 
 animate = () => {
   //arrow function for creating animate function
@@ -132,15 +153,22 @@ animate = () => {
     enemy.velocity.x = 5;
   }
 
-  //detect collision
+  //detect collision for player
   if (
-    player.attackBox.position.x + player.attackBox.width >= enemy.position.x &&
-    player.attackBox.position.x <= enemy.position.x + enemy.width &&
-    player.attackBox.position.y + player.attackBox.height >= enemy.position.y &&
-    player.attackBox.position.y <= enemy.position.y + enemy.height &&
+    rectangularCollisions({ rectangle1: player, rectangle2: enemy }) &&
     player.isAttacking
   ) {
+    player.isAttacking = false;
     console.log('go');
+  }
+
+  //detect collision for enemy
+  if (
+    rectangularCollisions({ rectangle1: player, rectangle2: enemy }) &&
+    enemy.isAttacking
+  ) {
+    enemy.isAttacking = false;
+    console.log('enemy attack success');
   }
 };
 
