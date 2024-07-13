@@ -49,15 +49,15 @@ class Sprite {
     c.fillRect(this.position.x, this.position.y, this.width, this.height);
 
     //attack box
-    //if (this.isAttacking) {
-    c.fillStyle = 'yellow';
-    c.fillRect(
-      this.attackBox.position.x,
-      this.attackBox.position.y,
-      this.attackBox.width,
-      this.attackBox.height
-    );
-    //}
+    if (this.isAttacking) {
+      c.fillStyle = 'yellow';
+      c.fillRect(
+        this.attackBox.position.x,
+        this.attackBox.position.y,
+        this.attackBox.width,
+        this.attackBox.height
+      );
+    }
   }
 
   update(fillStyle) {
@@ -203,6 +203,9 @@ window.addEventListener('keydown', (event) => {
     case 'ArrowUp':
       enemy.velocity.y += -20;
       enemy.lastkey = 'ArrowUp';
+      break;
+    case 'ArrowDown':
+      enemy.isAttacking = true;
       break;
   }
   console.log(event.key);
