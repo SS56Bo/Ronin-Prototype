@@ -202,7 +202,7 @@ window.addEventListener('keydown', (event) => {
       break;
     case 'ArrowUp':
       enemy.velocity.y += -20;
-      enemy.lastkey = 'ArrowUp';
+      enemy.attack();
       break;
     case 'ArrowDown':
       enemy.isAttacking = true;
